@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!-- SHAPE -->
+
+
+<!-- FEATURES -->
+<section class="bg-gradient-dark-black mt-n11 pt-12 pb-8">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-7 text-center">
+
+        <!-- Heading -->
+        <h2 class="display-3 fw-bold text-white">
+          Prediction
+        </h2>
+
+        <!-- Text -->
+        <p class="lead text-body-secondary mb-9">
+          Application
+        </p>
+
+      </div>
+    </div> <!-- / .row -->
+    <div class="row mt-n7">
+
+      <!-- Form Prediksi -->
+      <div class="col-12 col-sm-6 col-lg-6 mt-7 rounded-3">
+        <div class="card card-bleed shadow-light-lg mb-6 bg-dark">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Heading -->
+                <h4 class="display-5 fw-bold text-white mb-0">Memprediksi Customer</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <!-- List group -->
+            <div class="list-group list-group-flush bg-dark">
+
+              <!-- First list group item -->
+              <div class="list-group-item bg-dark">
+                <div class="row align-items-center">
+                </div>
+                <div class="card-body">
+                  <!-- List group -->
+                  <div class="list-group list-group-flush bg-dark">
+                    <div class="list-group-item bg-dark">
+                      <div class="row align-items-center">
+                        <form action="{{ url_for('predict') }}" method="post">
+                          <div class="col-auto">
+                            <!-- First name -->
+                            <div class="col-12 col-md-12 mb-3">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="registrationFirstNameModal"
+                                  placeholder="First name" name="durasi" required>
+                                <label for="registrationFirstNameModal">Durasi Langganan</label>
+                              </div>
+                            </div>
+
+                            <!-- Jumlah Panggilan -->
+                            <div class="col-12 col-md-12 mb-3">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="registrationLastNameModal"
+                                  placeholder="Last name" name="jml_panggilan" required>
+                                <label for="registrationLastNameModal">Jumlah Panggilan</label>
+                              </div>
+                            </div>
+
+                            <!-- Last name -->
+                            <div class="col-12 col-md-12 mb-3">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="registrationLastNameModal"
+                                  placeholder="Last name" name="guna_data" required>
+                                <label for="registrationLastNameModal">Penggunaan Data (GB)</label>
+                              </div>
+                            </div>
+
+                            <!-- Tagihan Rata-Rata -->
+                            <div class="col-12 col-md-12 mb-3">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" name="mean_tagihan" id="registrationLastNameModal"
+                                  placeholder="Last name" required>
+                                <label for="registrationLastNameModal">Tagihan Rata - Rata</label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Promosi Terakhir (Dropdown) -->
+                          <div class="col-12 col-md-12 mb-3">
+                            <div class="form-floating">
+                              <select class="form-control" id="promosiTerakhir" name="promosi" required>
+                                <option value="1">Iya</option>
+                                <option value="0">Tidak</option>
+                              </select>
+                              <label for="promosiTerakhir">Promosi Terakhir</label>
+                            </div>
+                          </div>
+
+                          <!-- Submit -->
+                          <div class="row">
+                            <div class="col-6">
+                              <button class="btn w-100 btn-info mt-3 lift" type="submit">
+                                Predict
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-6 mt-7 rounded-3">
+
+        <!-- hasil -->
+        <div class="col-12 col-sm-6 col-lg-5 mt-0 rounded-3">
+          <div class="card card-bleed shadow-light-lg mb-6 bg-dark" style="width: 500px; height: 300px;">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col">
+                  <!-- Heading -->
+                  <h4 class="display-5 fw-bold text-white mb-0">Memprediksi Customer</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <span>
+                <p class="text-body-secondary mb-5">Dari data yang diberikan pelanggan kemungkinan besar untuk :</p>
+                <span class="text-white display-4 fw-bold">{{ prediction_text }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Potensi Churn -->
+        <div class="col-12 col-sm-6 col-lg-5 mt-0 rounded-3">
+          <div class="card card-bleed shadow-light-lg mb-6 bg-dark" style="width: 500px; height: 305px;">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col">
+                  <!-- Heading -->
+                  <h4 class="display-5 fw-bold text-white mb-0">Potensi churn</h4>
+                </div>
+              </div>
+            </div>
+            <div class="card-body" >
+              <div style="width: 500px; height: 200px;">
+                <canvas id="potensiChurn"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div> <!-- / .row -->
+  </div>
+</section>
+
+<script>
+  const yes = {{ churn }};
+  const no = {{ tidak }};
+  const labels = ['Churn']; // Label diubah menjadi array dengan satu nilai 'Churn'
+
+// Data churn dengan dua kategori: Tidak (biru) dan Iya (merah)
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: 'Tidak',
+      data: [no], // Persentase "Tidak"
+      borderColor: 'rgba(54, 162, 235, 1)',
+      backgroundColor: 'rgba(54, 162, 235, 0.5)',
+      borderWidth: 2,
+      borderRadius: 5,
+      borderSkipped: false,
+    },
+    {
+      label: 'Iya',
+      data: [yes], // Persentase "Iya"
+      borderColor: 'rgba(255, 99, 132, 1)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      borderWidth: 2,
+      borderRadius: 5,
+      borderSkipped: false,
+    },
+  ],
+};
+
+new Chart(document.getElementById('potensiChurn'), {
+  type: 'bar',
+  data: data,
+  options: {
+    indexAxis: 'y', // Bar horizontal
+    elements: {
+      bar: {
+        borderWidth: 2,
+      },
+    },
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: 'white', // Mengatur warna tulisan legend menjadi putih
+          font: {
+            size: 14, // Ukuran font untuk legend
+          },
+        },
+      },
+      datalabels: {
+        display: true, // Menampilkan nilai persentase di setiap batang
+        color: 'white', // Mengubah warna data label menjadi putih
+        align: 'center',
+        anchor: 'center',
+        formatter: (value) => value + '%', // Menampilkan persentase
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: {
+          display: false, // Menghilangkan label angka di sumbu X
+        },
+        grid: {
+          display: false, // Menghilangkan garis grid di sumbu X
+        },
+      },
+      y: {
+        stacked: true,
+        ticks: {
+          display: false, // Menghilangkan label angka di sumbu Y
+        },
+        grid: {
+          display: false, // Menghilangkan garis grid di sumbu Y
+        },
+      },
+    },
+  },
+  plugins: [ChartDataLabels], // Plugin untuk menampilkan data di dalam bar
+});
+
+</script>
+
+{% endblock %}

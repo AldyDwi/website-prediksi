@@ -1,0 +1,81 @@
+<html lang="en"></html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{url_for('static',filename='favicon/favicon.ico')}}" type="image/x-icon">
+    
+    <!-- Map CSS -->
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css">
+    
+    <!-- Libs CSS -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/libs.bundle.css')}}">
+    
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/theme.bundle.css')}}">
+
+    <!-- chart.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    
+
+    <title>Churn Project</title>
+  </head>
+    <body>
+          <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+  
+      
+            <!-- Navigation -->
+            <ul class="navbar-nav mx-auto">
+              <li class="nav-item ">
+                <a class="nav-link" id="navbarLandings" href="{{url_for('home')}}" aria-haspopup="true" aria-expanded="false">
+                  Home
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" id="navbarPages"  href="{{url_for('model_page')}}" aria-haspopup="true" aria-expanded="false">
+                  Model
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="navbarAccount"  href="{{url_for('prediction_page')}}" aria-haspopup="true" aria-expanded="false">
+                  Prediction
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="navbarDocumentation"  href="{{url_for('new_data_page')}}" aria-haspopup="true" aria-expanded="false">
+                  Try New Data
+                </a>
+              </li>
+            </ul>
+      
+          </div>
+      
+        </div>
+    </nav>
+        <div>
+            <!-- konten halaman -->
+        {% block content %}
+
+        {% endblock %}
+        </div>
+    </body>
+
+       <!-- JAVASCRIPT -->
+    <!-- Map JS -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    
+    <!-- Vendor JS -->
+    <script src="{{url_for('static',filename='js/vendor.bundle.js')}}"></script>
+    
+    <!-- Theme JS -->
+    <script src="{{url_for('static',filename='js/theme.bundle.js')}}"></script>
+
+    
+
+
+  </body>
+</html>
