@@ -1,0 +1,6 @@
+ID Pelanggan,Durasi Langganan (bulan),Jumlah Panggilan,Penggunaan Data (GB),Tagihan Rata-rata,Promosi Terakhir,Churn
+P101,12,35,18,70000,TIDAK,TIDAK
+P102,24,14,20,100000,TIDAK,YA
+P103,5,29,21,180000,YA,TIDAK
+P104,8,10,8,50000,TIDAK,YA
+P105,16,20,12,90000,YA,YA

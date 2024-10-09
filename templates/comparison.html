@@ -1,0 +1,431 @@
+{% extends 'base.html' %} {% block content %}
+
+<!-- SHAPE -->
+
+<!-- FEATURES -->
+<section class="bg-gradient-dark-black mt-n11 pt-12 pb-8">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-7 text-center">
+        <!-- Heading -->
+        <h2 class="display-3 fw-bold text-white">Visualization</h2>
+
+        <!-- Text -->
+        <p class="lead text-body-secondary mb-9">
+          Berisi visualisasi data beserta perbandingan antara data lama dan
+          setelah upload data baru
+        </p>
+
+        <!-- Heading -->
+        <h2 class="display-5 fw-bold text-white mb-0">Jumlah Pelangggan Churn atau Tidak</h2>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</section>
+
+<!-- PERBANDINGAN -->
+<section class="pt-md-2 bg-black d-flex justify-content-center">
+  <div class="rounded-3 m-2">
+    <div
+      class="card card-bleed shadow-light-lg mb-6 bg-dark"
+      style="width: 500px; height: 305px"
+    >
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <!-- Heading -->
+            <h4 class="display-5 fw-bold text-white mb-0">Output sebelum ada data baru</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="width: 500px; height: 200px">
+          <canvas id="dataLama"></canvas>
+          <script></script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rounded-3 m-2">
+    <div
+      class="card card-bleed shadow-light-lg mb-6 bg-dark"
+      style="width: 500px; height: 305px"
+    >
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <!-- Heading -->
+            <h4 class="display-5 fw-bold text-white mb-0">
+              Output setelah ada data baru
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="width: 500px; height: 200px">
+          <canvas id="dataBaru"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA BARU UPLOAD -->
+<section class="pt-md-2 bg-black d-flex justify-content-center">
+  <div class="rounded-3 m-2"></div>
+    <div
+      class="card card-bleed shadow-light-lg mb-6 bg-dark"
+      style="width: 500px; height: 400px"
+    >
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <!-- Heading -->
+            <h4 class="display-5 fw-bold text-white mb-0">Data yang baru diupload</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body d-flex justify-content-center">
+        <div class="" style="width: 250px; height: 250px">
+          <canvas id="dataLastest"></canvas>
+          <script></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pt-md-10 bg-black">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-7 text-center">
+      <!-- Heading -->
+      <h2 class="display-5 fw-bold text-white mb-9">Classification Report</h2>
+    </div>
+  </div>
+  <!-- <div style="width: 600px; margin: auto;">
+    <canvas id="classificationChart"></canvas>
+  </div> -->
+</section>
+<section class="pt-md-2 bg-black d-flex justify-content-center">
+  <div class="rounded-3 m-2"></div>
+    <div
+      class="card card-bleed shadow-light-lg mb-6 bg-dark"
+      style="width: 800px; height: 350px"
+    >
+      <div class="card-body d-flex justify-content-center">
+        <div style="width: 600px;  height: 300px;">
+          <canvas id="classificationChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLACEMENT RATES -->
+<section class="py-10 py-md-11 bg-black">
+  <!-- BORDER -->
+
+  <!-- FOOTER -->
+  <footer class="py-8 py-md-11 bg-black">
+    <!-- BORDER -->
+    <div class="bg-black">
+      <div class="container border-top border-gray-900 border-opacity-50"></div>
+    </div>
+  </footer>
+
+  <script>
+    // data lama
+    const iyaLama = {{ ya_lama }};
+            const tidakLama = {{ tidak_lama }};
+            const labels = ['Churn']; // Label diubah menjadi array dengan satu nilai 'Churn'
+
+            // Data churn dengan dua kategori: Tidak (biru) dan Iya (merah)
+            const data = {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Tidak',
+                  data: [tidakLama], // Persentase "Tidak"
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  borderWidth: 2,
+                  borderRadius: 5,
+                  borderSkipped: false,
+                },
+                {
+                  label: 'Iya',
+                  data: [iyaLama], // Persentase "Iya"
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                  borderWidth: 2,
+                  borderRadius: 5,
+                  borderSkipped: false,
+                },
+              ],
+            };
+
+            new Chart(document.getElementById('dataLama'), {
+              type: 'bar',
+              data: data,
+              options: {
+                indexAxis: 'y', // Bar horizontal
+                elements: {
+                  bar: {
+                    borderWidth: 2,
+                  },
+                },
+                responsive: true,
+                plugins: {
+                  legend: {
+                    labels: {
+                      color: 'white', // Mengatur warna tulisan legend menjadi putih
+                      font: {
+                        size: 14, // Ukuran font untuk legend
+                      },
+                    },
+                  },
+                  datalabels: {
+                    display: true, // Menampilkan nilai persentase di setiap batang
+                    color: 'white', // Mengubah warna data label menjadi putih
+                    align: 'center',
+                    anchor: 'center',
+                    formatter: (value) => value + '%', // Menampilkan persentase
+                  },
+                },
+                scales: {
+                  x: {
+                    stacked: true,
+                    ticks: {
+                      display: false, // Menghilangkan label angka di sumbu X
+                    },
+                    grid: {
+                      display: false, // Menghilangkan garis grid di sumbu X
+                    },
+                  },
+                  y: {
+                    stacked: true,
+                    ticks: {
+                      display: false, // Menghilangkan label angka di sumbu Y
+                    },
+                    grid: {
+                      display: false, // Menghilangkan garis grid di sumbu Y
+                    },
+                  },
+                },
+              },
+              plugins: [ChartDataLabels], // Plugin untuk menampilkan data di dalam bar
+            });
+
+    // data gabungan setelah upload data baru
+    const iyaBaru = {{ ya_baru }};
+    const tidakBaru = {{ tidak_baru }};
+    const label = ['Churn']; // Label diubah menjadi array dengan satu nilai 'Churn'
+
+    // Data churn dengan dua kategori: Tidak (biru) dan Iya (merah)
+    const data1 = {
+      labels: label,
+      datasets: [
+        {
+          label: 'Tidak',
+          data: [tidakBaru], // Persentase "Tidak"
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderWidth: 2,
+          borderRadius: 5,
+          borderSkipped: false,
+        },
+        {
+          label: 'Iya',
+          data: [iyaBaru], // Persentase "Iya"
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          borderWidth: 2,
+          borderRadius: 5,
+          borderSkipped: false,
+        },
+      ],
+    };
+
+    new Chart(document.getElementById('dataBaru'), {
+      type: 'bar',
+      data: data1,
+      options: {
+        indexAxis: 'y', // Bar horizontal
+        elements: {
+          bar: {
+            borderWidth: 2,
+          },
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white', // Mengatur warna tulisan legend menjadi putih
+              font: {
+                size: 14, // Ukuran font untuk legend
+              },
+            },
+          },
+          datalabels: {
+            display: true, // Menampilkan nilai persentase di setiap batang
+            color: 'white', // Mengubah warna data label menjadi putih
+            align: 'center',
+            anchor: 'center',
+            formatter: (value) => value + '%', // Menampilkan persentase
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              display: false, // Menghilangkan label angka di sumbu X
+            },
+            grid: {
+              display: false, // Menghilangkan garis grid di sumbu X
+            },
+          },
+          y: {
+            stacked: true,
+            ticks: {
+              display: false, // Menghilangkan label angka di sumbu Y
+            },
+            grid: {
+              display: false, // Menghilangkan garis grid di sumbu Y
+            },
+          },
+        },
+      },
+      plugins: [ChartDataLabels], // Plugin untuk menampilkan data di dalam bar
+    });
+
+    // data baru
+    const iyaLastest = {{ jumlah_iya }};
+    const tidakLastest = {{ jumlah_tidak }};
+    const label2 = ['Churn']; // Label diubah menjadi array dengan satu nilai 'Churn'
+
+    // Data churn dengan dua kategori: Tidak (biru) dan Iya (merah)
+    const data2 = {
+      labels: ['Churn', 'Tidak Churn'],
+      datasets: [
+        {
+          label: 'Jumlah',
+          data: [iyaLastest, tidakLastest], // Churn 46, Tidak Churn 54
+          backgroundColor: [ 'rgba(255, 99, 132, 0.5)','rgba(54, 162, 235, 0.5)'], // Merah untuk Churn, Biru untuk Tidak Churn
+          borderColor: [ 'rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)'], 
+        }
+      ]
+    };
+
+    new Chart(document.getElementById('dataLastest'), {
+      type: 'doughnut',
+      data: data2,
+      options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            color: '#FFFFFF' // Label warna putih
+          }
+        }
+      }
+    }
+    });
+
+    // Menghitung classification report
+    // Data yang dikirim dari Flask
+    var averageReport = {{ average_report | tojson }};
+    
+    // Periksa data yang diterima
+    console.log(averageReport);
+
+    // Metrik yang akan divisualisasikan
+    var metrics = ['precision', 'recall', 'f1-score', 'accuracy'];
+
+    // Label (0, 1) dan akurasi secara keseluruhan
+    var label4 = ['0', '1', 'accuracy'];
+
+    // Mengambil data dari averageReport untuk setiap metrik
+    var dataValues = metrics.map(metric => {
+        return label4.map(label => averageReport[label] ? averageReport[label][metric] || averageReport[metric] || 0 : 0);
+    });
+
+    console.log(dataValues); // Cek nilai data yang akan digunakan dalam chart
+
+    // Pengaturan dataset untuk chart.js
+    var datasets = metrics.map((metric, index) => {
+        return {
+            label: metric,
+            data: dataValues[index],
+            backgroundColor: `rgba(${(index+1)*50}, 99, 132, 0.5)`, // Warna background yang berbeda
+            borderColor: `rgba(${(index+1)*50}, 99, 132, 1)`, // Warna border yang berbeda
+            borderWidth: 1
+        }
+    });
+
+    // Pengaturan untuk bar chart
+    var ctx = document.getElementById('classificationChart').getContext('2d');
+    var classificationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: label4, // ['0', '1', 'accuracy']
+            datasets: datasets,
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        },
+                    },
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    titleColor: 'white',
+                    bodyColor: 'white',
+                    footerColor: 'white'
+                },
+            },
+            scales: {
+              x: {
+                  title: {
+                      display: true,
+                      text: 'Labels',
+                      color: 'white' // Warna judul sumbu X menjadi putih
+                  },
+                  ticks: {
+                      color: 'white' // Warna label sumbu X menjadi putih
+                  },
+                  grid: {
+                      color: 'rgba(255, 255, 255, 0.2)' // Warna garis grid vertikal menjadi putih dengan transparansi
+                  }
+              },
+              y: {
+                  title: {
+                      display: true,
+                      text: 'Scores',
+                      color: 'white' // Warna judul sumbu Y menjadi putih
+                  },
+                  ticks: {
+                      color: 'white', // Warna label sumbu Y menjadi putih
+                      stepSize: 0.1
+                  },
+                  grid: {
+                      color: 'rgba(255, 255, 255, 0.2)' // Warna garis grid horizontal menjadi putih dengan transparansi
+                  },
+                  min: 0,
+                  max: 1
+              }
+            }
+        }
+    });
+  </script>
+
+  {% endblock %}
+</section>
